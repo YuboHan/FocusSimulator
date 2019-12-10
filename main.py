@@ -12,7 +12,7 @@ if __name__ == "__main__":
     # Aperture = 0.028
     # defaultFocuser = FocuserProperties(0.028, 0.05, 100, 0.01, 10, 0.0025)
 
-    defaultFocuser = FocuserProperties(0.028, 0.05, 100, 0.01, 20, 0.003)
+    defaultFocuser = FocuserProperties(0.028, 0.05, 100, 0.01, 20, 0.0015)
 
     forestImage = cv2.imread('images/stanford.jpg')
     if forestImage is None:

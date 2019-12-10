@@ -113,7 +113,6 @@ class AutofocusAlgorithm:
                 self.curCaptureIndex += 1
                 return
             elif self.pList[i].p == pos:
-                print('same!')
                 # The program is deterministic, so we will skip this for now
                 if self.pList[i].s != score:
                     print('WARNING: pos(' + str(pos) + ') may have different values: ' +
@@ -156,14 +155,14 @@ class AutofocusAlgorithm:
             fScore = getFocusScore(magnitudeSpectrum)
             if display:
                 self.displayImage(blurredImage, centerChunk, magnitudeSpectrum, blurRadius)
+            else:
+                print('Capture = ' + str(self.curCaptureIndex) + ', position = ' + str(self.fPos))
 
             # Append to pList
             self.insertIntoList(self.fPos, fScore)
 
             # If we are not given enough captures to sweep entire barrel, we make the following assumption:
             #     If the focus score increases at any point, we have passed convergence
-            print('Captures to sweep barrel', capturesToSweepBarrel)
-            print('Maxnumcaptures', self.fProp.maxNumCaptures)
             if math.ceil(capturesToSweepBarrel * 4 / 3 + 1) >= self.fProp.maxNumCaptures:
                 # If focus score at last position is better than what it is now.
                 # We add a threshold of 0.1 to get rid of noise
@@ -185,7 +184,6 @@ class AutofocusAlgorithm:
         # But this should never be the highest value.
         upperThreshold = min(maxScoreIndex + 1, len(self.pList) - 1)
         innerSweepStart = self.pList[upperThreshold].p
-        print('innerSweepStart = ', innerSweepStart)
 
         # We want to save one more move at the very end to adjust to highest known focus score location
         while innerSweepStart < self.fPos and self.curCaptureIndex < self.fProp.maxNumCaptures - 1:
@@ -198,6 +196,8 @@ class AutofocusAlgorithm:
             fScore = getFocusScore(magnitudeSpectrum)
             if display:
                 self.displayImage(blurredImage, centerChunk, magnitudeSpectrum, blurRadius)
+            else:
+                print('Capture = ' + str(self.curCaptureIndex) + ', position = ' + str(self.fPos))
 
             self.insertIntoList(self.fPos, fScore)
 
@@ -210,8 +210,6 @@ class AutofocusAlgorithm:
         while self.curCaptureIndex < self.fProp.maxNumCaptures - 1:
             # First, find the best focus score
             maxScore, maxScoreIndex = self.getMaxFocusScore()
-
-            print('best score location = ', self.pList[maxScoreIndex].p)
 
             thresholdLowIndex = max(0, maxScoreIndex - 1)
             thresholdHighIndex = min(len(self.pList) - 1, maxScoreIndex + 1)
@@ -238,6 +236,8 @@ class AutofocusAlgorithm:
             fScore = getFocusScore(magnitudeSpectrum)
             if display:
                 self.displayImage(blurredImage, centerChunk, magnitudeSpectrum, blurRadius)
+            else:
+                print('Capture = ' + str(self.curCaptureIndex) + ', position = ' + str(self.fPos))
 
             self.insertIntoList(self.fPos, fScore)
 
@@ -253,6 +253,8 @@ class AutofocusAlgorithm:
         fScore = getFocusScore(magnitudeSpectrum)
         if display:
             self.displayImage(blurredImage, centerChunk, magnitudeSpectrum, blurRadius, True)
+        else:
+            print('Capture = ' + str(self.curCaptureIndex) + ', position = ' + str(self.fPos))
 
         self.insertIntoList(self.fPos, fScore)
 
